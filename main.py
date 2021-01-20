@@ -70,7 +70,7 @@ class Dungeon:
 
 		self._create_pyro_slime()
 		self._create_pyro_boss()
-	#	self.music()
+		#self.music()
 
 
 	#reset
@@ -130,7 +130,7 @@ class Dungeon:
 		elif self.button.rect_text18.collidepoint(mouse_pos):
 			self.error = False
 			self.gameover = False
-			#self.stats.reset_statistics()
+			self.stats.reset_statistics()
 			self.reset_game()
 			self.run_game()
 
@@ -139,41 +139,47 @@ class Dungeon:
 		if event.key == pygame.K_ESCAPE:
 			self.menu_pause.run_game()
 		elif event.key == pygame.K_d:
-			self.aether_game.moving_right = True
-			self.aether_game.standing = False
+			if self.gameover == False:
+				self.aether_game.moving_right = True
+				self.aether_game.standing = False
 
 		elif event.key == pygame.K_a:
-			self.aether_game.moving_left = True
-			self.aether_game.standing = False
+			if self.gameover == False:
+				self.aether_game.moving_left = True
+				self.aether_game.standing = False
 
 		elif event.key == pygame.K_w:
-			self.aether_game.moving_up = True
-			self.aether_game.standing = False
+			if self.gameover == False:
+				self.aether_game.moving_up = True
+				self.aether_game.standing = False
 
 		elif event.key == pygame.K_s:
-			self.aether_game.moving_down = True
-			self.aether_game.standing = False
+			if self.gameover == False:
+				self.aether_game.moving_down = True
+				self.aether_game.standing = False
 
 		elif event.key == pygame.K_SPACE:
-			self.new_aether_bullet()
-			self.aether_game.standing = True
-			self.shot_effect()
+			if self.gameover == False:
+				self.new_aether_bullet()
+				self.aether_game.standing = True
+				self.shot_effect()
 
 		elif event.key == pygame.K_SLASH and self.aether_game.rect.y <= self.level_upgrader.door_rect.bottom:
-			if len(self.pyro_slimes) == 0 and self.stats.bos_number == 0:
-				self.spawn += 1
-				if self.spawn % 4 == 2 and self.stats.level > 2:
-					self.reset_stats_boss()
-				self.open_door()
-				time.sleep(0.1)
-				self.check_slime_empty()
-				self.aether_game.restart_position()
-				self.chest.chest_open = False
-				self.chest.take = False
-				self.chest.choice()
-				print("done")
-			else:
-				print("Kill all the enemy to procide")
+			if self.gameover == False:
+				if len(self.pyro_slimes) == 0 and self.stats.bos_number == 0:
+					self.spawn += 1
+					if self.spawn % 4 == 2 and self.stats.level > 2:
+						self.reset_stats_boss()
+					self.open_door()
+					time.sleep(0.1)
+					self.check_slime_empty()
+					self.aether_game.restart_position()
+					self.chest.chest_open = False
+					self.chest.take = False
+					self.chest.choice()
+					print("done")
+				else:
+					print("Kill all the enemy to procide")
 				
 		elif event.key == pygame.K_p:
 			self.pause_game()
@@ -231,7 +237,7 @@ class Dungeon:
 		self.health_bar.draw()
 		self.scoreboard.draw_stats()
 		self.shooting_slime()
-		self.aether_game.show_aether()
+		
 		self.pyro_slimes.draw(self.screen)
 		if len(self.pyro_slimes) == 0:
 			self.chest.draw_chest_c()
@@ -243,6 +249,7 @@ class Dungeon:
 		if self.aether_game.standing == False:
 			self.walk_effect()
 
+		self.aether_game.show_aether()
 		for bullet in self.aether_bullets.sprites():
 			bullet.draw_bullet()
 
@@ -255,7 +262,7 @@ class Dungeon:
 
 	def game_over_sound(self):
 		gameover = pygame.mixer.Sound("sound effects/gameover.wav")
-		gameover.set_volume(0.1)
+		gameover.set_volume(0.01)
 		gameover.play()
 
 	def shot_effect(self):

@@ -33,7 +33,7 @@ class HowToPlay():
 
 	def book_effect(self):
 		bookeffect = pygame.mixer.Sound("sound effects/book effect.wav")
-		bookeffect.set_volume(0.01)
+		bookeffect.set_volume(0.1)
 		bookeffect.play()
 	
 
